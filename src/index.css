@@ -1,6 +1,6 @@
 body {
     background-image: url("/dottedBackground.webp");
-    background-size: 500px;
+    background-size: 90px;
     backface-visibility: blur(10px);
     font-family: "Comic Neue", cursive;
     overflow-x: hidden;

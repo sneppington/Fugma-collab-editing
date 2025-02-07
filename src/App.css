@@ -1,0 +1,146 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+}
+
+#menu-header {
+  height: 100px;
+  margin: 10px; /* Adjust margin to remove the side margins */
+  border: 5px black solid;
+  background-color: rgb(245, 255, 0);
+  background-image: url("/paintbrushLine.png");
+  background-size: 30px;
+  overflow: hidden; /* Prevent overflow */
+}
+
+.header-content {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.header-button-wrapper {
+  height: 50px;
+  width: 170px;
+  margin: 10px;
+  display: flex;
+  font-size: 30px;
+}
+
+.header-button {
+  height: inherit;
+  width: inherit;
+  margin: 10px;
+  transform: translate(-10px, -10px);
+  z-index: 1;
+  position: absolute;
+  border: 5px black solid;
+  font-family: "Comic Neue", cursive;
+  font-weight: bold;
+  font-size: inherit;
+  transition: background-color cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s, transform cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s;
+}
+
+.header-button-background {
+  height: inherit;
+  width: inherit;
+  margin: 10px;
+  position: absolute;
+  background-color: black;
+}
+
+.header-button-wrapper:hover .header-button {
+  background-color: mediumspringgreen;
+  transform: translate(0, 0);
+}
+
+#title-holder {
+  width: fit-content;
+  height: fit-content;
+  padding: 10px;
+  margin-top: 60px;
+  border: 5px black solid;
+  background-color: rgba(255, 255, 255, 0.673);
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  margin: 10px;
+  margin-left: 30px;
+}
+
+.select-square {
+  width: fit-content;
+  height: fit-content;
+  border: 3px black solid;
+}
+
+#title-test-wrapper {
+  display: flex;
+  width: 100vw;
+  height: fit-content;
+}
+
+#drawing-canvas-wrapper {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  flex: 1;
+}
+
+footer {
+  height: 300px;
+  width: 100%;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+  transform: translateY(10px);
+  margin: 0;
+}
+
+footer div {
+  border: 3px black solid;
+  flex-shrink: 0;
+}
+
+.footer-deco {
+  height: 300px;
+  width: 70%;
+  background: linear-gradient(rgba(255, 203, 144, 0.673), rgba(255, 128, 0, 0.673));
+  transform: rotate(-10deg) translate(-18%, 180px);
+}
+
+.footer-main {
+  height: 450px;
+  width: 100%;
+  background: linear-gradient(rgba(170, 255, 144, 0.67), rgba(0, 255, 38, 0.67));
+  transform: rotate(3deg) translate(-10%, calc(-10% + 300px));
+}
+
+@media (max-width: 700px) {
+  #title-test-wrapper {
+    flex-direction: column;
+    justify-content: center;
+  }
+  #title-holder {
+    margin-left: 10px;
+  }
+  .header-content {
+    justify-content: center;
+  }
+  .header-button-wrapper {
+    width: 80px;
+    font-size: 17px;
+  }
+}

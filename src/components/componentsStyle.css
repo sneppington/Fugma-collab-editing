@@ -1,0 +1,284 @@
+.canvas-wrapper {
+    width: 90%;
+    display: flex;
+    align-items: center; 
+    flex-direction: column;
+}
+
+.draw-canvas {
+    width: 100%;
+    background-color: white;
+    border: 5px black solid;
+}
+
+.drawing-tools {
+    width: 80%;
+    height: 80px;
+    background-color: #32fc5ad4;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    box-shadow: inset 10px 0px 10px -5px #6cff89, 
+                inset 0px -10px 10px -5px #6cff89;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    border: 5px black solid;
+    border-top: 0;
+}
+
+.pencil-tool {
+    height: 100px;
+    width: 100px;
+    background-color: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pencil {
+    height: 70px;
+    width: 70px;
+    background-image: url("/pen.svg");
+    position: absolute;
+    transform: translate(-2px, -10px);
+    z-index: 1;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    transition: transform cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s;
+}
+
+.pencil-shadow {
+    height: 70px;
+    width: 70px;
+    position: absolute;
+    transform: translate(1px, 2px);
+    background-image: url("/penShadow.svg");
+    border: none;
+    outline: none;
+    box-shadow: none;
+    transition: transform cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s;
+}
+
+.pencil-tool:hover .pencil {
+    transform: translate(-1px, -5px);
+}
+
+.pencil-tool:hover .pencil-shadow {
+    transform: translate(1px, 1px);
+}
+
+.pencil-tool.active .pencil {
+    transform: translate(0, 0);
+}
+
+.pencil-tool.active .pencil-shadow {
+    transform: translate(0, 0);
+}
+
+.earser-tool {
+    height: 100px;
+    width: 100px;
+    background-color: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.earser {
+    height: 70px;
+    width: 70px;
+    background-image: url("/earser.svg");
+    position: absolute;
+    transform: translate(-2px, -10px);
+    z-index: 1;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    transition: transform cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s;
+}
+
+.earser-shadow {
+    height: 70px;
+    width: 70px;
+    position: absolute;
+    transform: translate(1px, 2px);
+    background-image: url("/earserShadow.svg");
+    border: none;
+    outline: none;
+    box-shadow: none;
+    transition: transform cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s;
+}
+
+.earser-tool:hover .earser {
+    transform: translate(-1px, -5px);
+}
+
+.earser-tool:hover .earser-shadow {
+    transform: translate(1px, 1px);
+}
+
+.earser-tool.active .earser {
+    transform: translate(0, 0);
+}
+
+.earser-tool.active .earser-shadow {
+    transform: translate(0, 0);
+}
+
+.bucket-tool {
+    height: 100px;
+    width: 100px;
+    background-color: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bucket {
+    height: 70px;
+    width: 70px;
+    background-image: url("/bucket.svg");
+    position: absolute;
+    transform: translate(-2px, -10px);
+    z-index: 1;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    transition: transform cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s;
+}
+
+.bucket-shadow {
+    height: 70px;
+    width: 70px;
+    position: absolute;
+    transform: translate(5px, 3px);
+    background-image: url("/bucketShadow.svg");
+    border: none;
+    outline: none;
+    box-shadow: none;
+    transition: transform cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s;
+}
+
+.bucket-tool:hover .bucket {
+    transform: translate(-1px, -5px);
+}
+
+.bucket-tool:hover .bucket-shadow {
+    transform: translate(1px, 1px);
+}
+
+.bucket-tool.active .bucket {
+    transform: translate(0, 0);
+}
+
+.bucket-tool.active .bucket-shadow {
+    transform: translate(0, 0);
+}
+
+/* Color Picker*/
+
+.color-picker-wrapper {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.color-picker {
+    width: 42px;
+    height: 42px;
+    z-index: 1;
+    position: absolute;
+    transform: translate(-7px, -7px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+    border: 4px black solid;
+    overflow: hidden;
+    transition: transform cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s;
+}
+
+.color-picker input {
+    width: 50px;
+    height: 50px;
+    margin: 0;
+    opacity: 0;
+}
+
+.color-picker-shadow {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    transform: translate(2px, 2px);
+    background-color: black;
+    transition: transform cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s;
+}
+
+.color-picker-wrapper:hover .color-picker {
+    transform: translate(-3px, -3px);
+}
+
+.color-picker-wrapper:hover .color-picker-shadow {
+    transform: translate(1px, 1px);
+}
+
+.color-picker-wrapper:active .color-picker {
+    transform: translate(0, 0);
+}
+
+.color-picker-wrapper:active .color-picker-shadow {
+    transform: translate(0, 0);
+}
+
+.top-button-wrapper-wrapper {
+    width: 100%;
+    height: fit-content;
+    position: absolute;
+    transform: translateY(-10px);
+    display: flex;
+    justify-content: space-between;
+}
+
+.nav-button {
+    height: 60px;
+    width: 60px;
+    position: absolute;
+    transform: translate(-7px, -7px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+    border: 5px black solid;
+    overflow: hidden;
+    transition: transform cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s;;
+}
+.nav-button-shadow {
+    height: 60px;
+    width: 60px;
+    background-color: black;
+    border: 5px black solid;
+}
+
+.nav-button button {
+    width: inherit;
+    height: inherit;
+    background-color: white;
+    border: none;
+    background-image: url("/arrow.svg");
+    background-repeat: no-repeat;
+    background-position: center 5px;
+}
+
+.nav-button:hover {
+    transform: translate(-3px, -3px);
+}
+
+.nav-button:active {
+    transform: translate(0, 0);
+}

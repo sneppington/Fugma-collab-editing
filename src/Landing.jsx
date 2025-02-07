@@ -1,9 +1,6 @@
 import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import DrawingTool from './components/draw'
-import RandomShapes from './components/randomizedShapes'
 
 function Landing() {
   const [count, setCount] = useState(0)

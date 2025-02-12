@@ -112,6 +112,7 @@ const DrawingPage = ({ peerClient, setShowLanding }) => {
                     peerConnectionBuffer.createAnswer(
                         document.querySelector("#user-add-form input").value
                     ).then((answer_) => {
+                        answer = answer_
                         navigator.clipboard.writeText(answer_).then(() => {
                             console.log("Text copied to clipboard!")
                         }).catch(err => {

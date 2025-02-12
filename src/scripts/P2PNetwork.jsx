@@ -1,7 +1,7 @@
 const StartUpPeerConnection = (mode) => {
   const peer = new RTCPeerConnection()
   let dataChannel // Instance to send/receive messages through
-  let ICE = ""
+  let ICE = []
   
   const createOffer = () => {
       dataChannel = peer.createDataChannel("chat")
@@ -31,10 +31,12 @@ const StartUpPeerConnection = (mode) => {
   }
 
   // Save ICE candidate received from the remote peer
-  const saveIceCandidate = (candidate) => {
-      return peer.addIceCandidate(new RTCIceCandidate(JSON.parse(candidate)))
-          .then(() => console.log("ICE candidate added successfully"))
-          .catch((err) => console.error("Error adding ICE candidate:", err))
+  const saveIceCandidate = (candidates) => {
+    JSON.parse(candidates).forEach(candidate => {
+        peerConnection.addIceCandidate(new RTCIceCandidate(candidate))
+          .then(() => console.log("ICE candidate added:", candidate))
+          .catch(err => console.error("Error adding ICE candidate:", err))
+    })
   }
 
   const getDataChannel = () => {
@@ -48,7 +50,7 @@ const StartUpPeerConnection = (mode) => {
   // Listen for ICE candidates and send them to the other peer
   peer.onicecandidate = (event) => {
       if (event.candidate) {
-        ICE += JSON.stringify(event.candidate)
+        ICE.push(event.candidate)
         console.log(ICE)
         // Send this candidate to the remote peer
       }

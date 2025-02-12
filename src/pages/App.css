@@ -1,0 +1,324 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+}
+
+#menu-header {
+  height: 100px;
+  margin: 10px; /* Adjust margin to remove the side margins */
+  border: 5px black solid;
+  background-color: rgb(245, 255, 0);
+  background-image: url("/paintbrushLine.png");
+  background-size: 30px;
+  overflow: hidden; /* Prevent overflow */
+}
+
+.header-content {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.header-button-wrapper {
+  height: 50px;
+  width: 170px;
+  margin: 10px;
+  display: flex;
+  font-size: 30px;
+}
+
+.header-button {
+  height: inherit;
+  width: inherit;
+  margin: 10px;
+  transform: translate(-10px, -10px);
+  z-index: 1;
+  position: absolute;
+  border: 5px black solid;
+  font-family: "Comic Neue", cursive;
+  font-weight: bold;
+  font-size: inherit;
+  transition: background-color cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s, transform cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s;
+}
+
+.header-button-background {
+  height: inherit;
+  width: inherit;
+  margin: 10px;
+  position: absolute;
+  background-color: black;
+}
+
+.header-button-wrapper:hover .header-button {
+  background-color: mediumspringgreen;
+  transform: translate(0, 0);
+}
+
+#title-holder {
+  width: fit-content;
+  height: fit-content;
+  padding: 10px;
+  margin-top: 60px;
+  border: 5px black solid;
+  background-color: rgba(255, 255, 255, 0.673);
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  margin: 10px;
+  margin-left: 30px;
+}
+
+.select-square {
+  width: fit-content;
+  height: fit-content;
+  border: 3px black solid;
+}
+
+#title-test-wrapper {
+  display: flex;
+  width: 100vw;
+  height: fit-content;
+}
+
+#drawing-canvas-wrapper {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  flex: 1;
+}
+
+/* Join page*/
+
+#join-wrapper {
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  z-index: 2;
+  position: fixed;
+  transform: translateX(100vw);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s;
+}
+
+#join-steps {
+  width: 80vw;
+  height: 90vh;
+  background-color: white;
+  background-image: url("/dottedBackground.webp");
+  background-size: 90px;
+  border: 5px black solid;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* End join page */
+
+footer {
+  height: 300px;
+  width: 100%;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+  transform: translateY(10px);
+  margin: 0;
+}
+
+footer div {
+  border: 3px black solid;
+  flex-shrink: 0;
+}
+
+.footer-deco {
+  height: 300px;
+  width: 70%;
+  background: linear-gradient(rgba(255, 203, 144, 0.673), rgba(255, 128, 0, 0.673));
+  transform: rotate(-10deg) translate(-18%, 180px);
+}
+
+.footer-main {
+  height: 450px;
+  width: 100%;
+  background: linear-gradient(rgba(170, 255, 144, 0.67), rgba(0, 255, 38, 0.67));
+  transform: rotate(3deg) translate(-10%, calc(-10% + 300px));
+}
+
+@media (max-width: 700px) {
+  #title-test-wrapper {
+    flex-direction: column;
+    justify-content: center;
+  }
+  #title-holder {
+    margin-left: 10px;
+  }
+  .header-content {
+    justify-content: center;
+  }
+  .header-button-wrapper {
+    width: 80px;
+    font-size: 17px;
+  }
+}
+
+/* Drawing page */
+
+#draw-page-control-bar {
+  height: 100%;
+  max-width: 300px;
+  background-color: rgba(0, 224, 127, 0.8);
+  box-shadow: inset 10px 0px 10px -5px rgb(22, 251, 152), 
+              inset 0px -10px 10px -5px rgb(22, 251, 152);
+  border: 5px black solid;
+  border-right: none;
+  border-bottom-left-radius: 10px;
+  z-index: 10;
+  flex: 1;
+  padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+#add-user-wrapper {
+  width: 90%;
+  height: 30px;
+  visibility: none;
+  background-color: rgba(255, 255, 255, 0.819);
+  border: 4px black solid;
+  border-radius: 20px;
+  overflow: hidden;
+  transition: height cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s;
+}
+
+#add-user-button-wrapper {
+  height: 30px;
+  display: flex;
+  align-items: center;
+}
+
+#add-user-button-wrapper span {
+  flex: 1;
+  font-weight: bolder;
+  font-size: 20px;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.715);
+}
+
+#add-user-button {
+  width: 35px;
+  height: 35px;
+  border: none;
+  border: 4px black solid;
+  background-color: rgb(11, 255, 11);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  transform: translate(-5px, -4px);
+  transition: scale cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s;
+}
+
+#add-user-button div {
+  height: 17px;
+  width: 4px;
+  background-color: black;
+  border-radius: 10px;
+  position: absolute;
+}
+
+#add-user-button:hover {
+  scale: 1.1;
+}
+
+#user-add-form {
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+#user-add-form input {
+  width: 80%;
+  height: 100%;
+  border: 0;
+  border-bottom-left-radius: 10px;
+  border-top-left-radius: 10px;
+}
+
+#copy-answer {
+  width: 70%;
+}
+
+#copy-ICE {
+  width: 70%;
+}
+
+#answer-wrapper {
+  height: 20px;
+  display: flex;
+  align-items: center; 
+}
+
+#answer-wrapper button {
+  height: 100%;
+}
+
+#ICE-wrapper {
+  height: 20px;
+  display: flex;
+  align-items: center; 
+}
+
+#ICE-wrapper button {
+  height: 100%;
+}
+
+#user-list {
+  width: 90%;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.user {
+  height: 25px;
+  width: 100%;
+  background-color: rgba(0, 168, 59, 0.5);
+  border: 4px black solid;
+  border-bottom-left-radius: 20px;
+  border-top-left-radius: 20px;
+  display: flex;
+}
+
+.user span {
+  flex: 1;
+}
+
+.user button {
+  width: 25px;
+  height: 25px;
+}

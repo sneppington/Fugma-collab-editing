@@ -1,5 +1,6 @@
 .canvas-wrapper {
     width: 90%;
+    height: 90%;
     display: flex;
     align-items: center; 
     flex-direction: column;
@@ -281,4 +282,15 @@
 
 .nav-button:active {
     transform: translate(0, 0);
+}
+
+
+/* p2pJoinUI Next */
+
+#p2pJoinUI-main {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

@@ -1,12 +1,13 @@
 import React, { useRef, useEffect, useState } from 'react';
-import paper from 'paper';
-import ColorPicker from './colorPicker'
+import paper_ from 'paper';
 import './componentsStyle.css'
 
-const DrawingTool = () => {
+const DrawingTool = ({ setDrawControl, peerConnections }) => {
     const [color, setColor] = useState("#ff0066")
     const canvasRef = useRef(null)
     const canvasWrapperRef = useRef(null)
+
+    let paper = new paper_.PaperScope
 
     let versionList = []
     let versionIndex = 0
@@ -20,18 +21,34 @@ const DrawingTool = () => {
             item[1].children.forEach(child => {
               if (child[0] === "Path") {
                 // Extract the path object (second element of the array)
-                const pathData = child[1];
+                const pathData = child[1]
                 if (pathData && pathData.segments && pathData.strokeColor) {
-                  paths.push(pathData); // Add the path to the result array
+                  paths.push(pathData) // Add the path to the result array
                 }
               }
-            });
+            })
           }
-        });
+        })
       
-        return paths;
+        return paths
     }
-      
+
+    const echoPeers = (message) => {
+        console.log(peerConnections.current)
+        for (let i = 0; i < peerConnections.current.peers.length; i++) {
+            console.log(peerConnections.current)
+            peerConnections.current.peers[i].getDataChannel().send(message) // Echo
+        }
+    }
+
+    const echoPath = (path) => {
+        console.log("mrw")
+        echoPeers(JSON.stringify({"answer": "addPath", "content": JSON.stringify(paper.project.exportJSON())}))
+    }
+
+    const echoRemovePath = (path) => {
+        echoPeers(JSON.stringify({"answer": "removePath", "content": JSON.stringify(path)}))
+    }
 
     useEffect(() => {
         let connections = []
@@ -45,7 +62,9 @@ const DrawingTool = () => {
         tool.maxDistance = 45; // Set tool properties
 
         paper.setup(canvasRef.current);
-        paper.project.currentStyle = new paper.Color('black');
+        paper.view.viewSize = new paper.Size(canvasWrapperRef.current.clientWidth, canvasWrapperRef.current.clientHeight)
+        console.log(canvasWrapperRef.clientWidth, canvasWrapperRef.clientHeight)
+        paper.project.currentStyle = new paper.Color('black')
 
         versionList.push(paper.project.exportJSON()) // Default project safe for code logic
 
@@ -59,7 +78,7 @@ const DrawingTool = () => {
                 paths_.push(...item.children)
             });
         
-            return paths_;
+            return paths_
         }
 
         const updateVersionList = () => {
@@ -78,7 +97,6 @@ const DrawingTool = () => {
             paper.project.clear() // Clear the current project
             paper.project.importJSON(versionList[versionIndex]) // Restore the cached version
             paths = getAllPathsFromAllItems()
-            console.log(paths)
         }
 
         const foward = () => {
@@ -86,6 +104,36 @@ const DrawingTool = () => {
     
             paper.project.clear() // Clear the current project
             paper.project.importJSON(versionList[versionIndex]) // Restore the cached version
+            paths = getAllPathsFromAllItems()
+        }
+
+        const addPath = (path) => {
+            paths.push(path)
+            console.log(path)
+            paper.importJSON(path)
+            updateVersionList()
+        }
+
+        const removePath = (path) => {
+            console.log("removing:", path[1])
+            let index = -1
+            console.log(path, path)
+
+            for (let i = 0; i < paths.length; i++) {
+                if (JSON.stringify(paths[i]) == JSON.stringify(path)) {
+                    index = i
+                }
+            }
+
+            if (index !== -1) {
+                paths[index].remove()
+                updateVersionList()
+            }
+        }
+
+        const replaceCanvas = (canvasJSON) => {
+            paper.importJSON(canvasJSON)
+            updateVersionList()
             paths = getAllPathsFromAllItems()
         }
 
@@ -109,11 +157,13 @@ const DrawingTool = () => {
             if (path) {
                 path.add(event.point)
                 path.smooth()
-                updateVersionList()
+                echoPath(path)
             }
         }
 
         // Earser //
+
+        let pathBuffer = []
 
         function earseDrag(event) {
             let eraser = new paper.Path.Circle({
@@ -121,28 +171,39 @@ const DrawingTool = () => {
                 radius: 20 // Eraser size
             })
         
+            let intersection = false
+
             // Loop through all paths and check for intersection with the eraser
             paths.forEach(existingPath => {
                 if (eraser.intersects(existingPath)) {
+                    pathBuffer.push(existingPath)
                     existingPath.remove() // Remove the path if it intersects the eraser
-                    updateVersionList()
+                    intersection = true
                 }
             })
+
             eraser.remove()
+            updateVersionList()
         }
 
+        function earseEnd() {
+            pathBuffer.forEach(path => {
+                echoRemovePath(path)
+            })
+        }
         // Bucket //
 
         function bucketFill(event) {
             let hitResult = paper.project.hitTest(event.point, {
                 fill: true,  // Detect filled areas
                 stroke: true, // Detect strokes
-                tolerance: 5  // Adjust click tolerance
+                tolerance: 10  // Adjust click tolerance
             });
         
             if (hitResult && hitResult.item) {
                 hitResult.item.fillColor = new paper.Color(document.querySelector(".color-picker").style.backgroundColor);
                 updateVersionList()
+                echoPath("path")
             }
         }
 
@@ -186,7 +247,7 @@ const DrawingTool = () => {
                 case "earser":
                     tool.onMouseDown = () => {}
                     tool.onMouseDrag = earseDrag
-                    tool.onMouseUp = () => {}
+                    tool.onMouseUp = earseEnd
                     break
                 case "bucket":
                     tool.onMouseDown = bucketFill
@@ -217,10 +278,23 @@ const DrawingTool = () => {
         canvasWrapperRef.current.querySelector(".back-button-canvas").addEventListener("click", back)
         canvasWrapperRef.current.querySelector(".foward-button-canvas").addEventListener("click", foward)
 
+        
+        if (setDrawControl) { // Sending scope back up
+            setDrawControl({
+                paper,
+                addPath,
+                removePath,
+                replaceCanvas
+        })
+            console.log("paper scope sent correctly")
+        }
+
         return () => {
             for (let connection of connections) {
                 connection()
             }
+            paper.clear()
+            paper.remove()
         }
     }, []);
 
@@ -244,7 +318,7 @@ const DrawingTool = () => {
                     <div className='nav-button-shadow'></div>
                 </div>
             </div>
-            <canvas className='draw-canvas' ref={canvasRef} style={{ width: '100%', height: '100%' }} />
+            <canvas className='draw-canvas' ref={canvasRef}/>
             <div className='drawing-tools'>
                 <button className='pencil-tool'>
                     <div className='pencil' />

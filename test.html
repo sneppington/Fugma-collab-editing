@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WebRTC Connection Test</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+    textarea { width: 90%; height: 80px; margin-bottom: 10px; }
+    button { padding: 10px; margin: 5px; cursor: pointer; }
+    #status { font-weight: bold; margin-top: 10px; }
+  </style>
+</head>
+<body>
+
+  <h1>WebRTC Connection Test</h1>
+  <p>Use this page to test WebRTC by manually exchanging offers, answers, and ICE candidates.</p>
+
+  <button onclick="createOffer()">Create Offer (User A)</button>
+  <textarea id="offerOutput" placeholder="Generated Offer will appear here"></textarea>
+  
+  <button onclick="createAnswer()">Create Answer (User B)</button>
+  <textarea id="answerInput" placeholder="Paste Offer here"></textarea>
+  <textarea id="answerOutput" placeholder="Generated Answer will appear here"></textarea>
+
+  <button onclick="saveAnswer()">Save Answer (User A)</button>
+  <textarea id="saveAnswerInput" placeholder="Paste Answer here"></textarea>
+
+  <h2>ICE Candidate Exchange</h2>
+  <button onclick="saveIceCandidate()">Save ICE Candidate</button>
+  <textarea id="iceCandidateInput" placeholder="Paste ICE Candidate(s) here (one per line)"></textarea>
+  <textarea id="iceCandidateOutput" placeholder="Generated ICE Candidate(s) will appear here"></textarea>
+
+  <h2>Send Messages</h2>
+  <input type="text" id="messageInput" placeholder="Type message here">
+  <button onclick="sendMessage()">Send Message</button>
+
+  <p id="status">Status: Not Connected</p>
+
+  <script>
+    const StartUpPeerConnection = () => {
+      const peer = new RTCPeerConnection({
+        iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
+      });
+      
+      let dataChannel;
+
+      // Append each ICE candidate rather than replacing the previous one
+      peer.onicecandidate = (event) => {
+        if (event.candidate) {
+          const candidateText = JSON.stringify(event.candidate);
+          const iceOutput = document.getElementById("iceCandidateOutput");
+          iceOutput.value += candidateText + "\n";
+        } else {
+          console.log("ICE gathering complete");
+        }
+      };
+
+      // When receiving a data channel (for the answerer)
+      peer.ondatachannel = (event) => {
+        dataChannel = event.channel;
+        dataChannel.onopen = () => {
+          console.log("Data channel is open");
+        };
+        dataChannel.onmessage = (event) => {
+          console.log("Received message:", event.data);
+        };
+      };
+
+      // Update connection status
+      peer.onconnectionstatechange = () => {
+        document.getElementById("status").innerText = "Status: " + peer.connectionState;
+      };
+
+      const createOffer = () => {
+        // Offerer creates a data channel
+        dataChannel = peer.createDataChannel("chat");
+        dataChannel.onopen = () => {
+          console.log("Data channel open");
+        };
+        return peer.createOffer()
+          .then((offer) => peer.setLocalDescription(offer).then(() => JSON.stringify(offer)));
+      };
+
+      const createAnswer = (offer) => {
+        return peer.setRemoteDescription(new RTCSessionDescription(JSON.parse(offer)))
+          .then(() => peer.createAnswer())
+          .then((answer) => peer.setLocalDescription(answer).then(() => JSON.stringify(answer)));
+      };
+
+      const saveAnswer = (answer) => {
+        return peer.setRemoteDescription(new RTCSessionDescription(JSON.parse(answer)))
+          .catch((err) => console.error("Error setting remote answer:", err));
+      };
+
+      // Accept multiple ICE candidates (one per line)
+      const saveIceCandidate = (candidatesText) => {
+        const candidateLines = candidatesText.split("\n").filter(line => line.trim() !== "");
+        candidateLines.forEach(candidateStr => {
+          try {
+            const candidateObj = JSON.parse(candidateStr);
+            peer.addIceCandidate(new RTCIceCandidate(candidateObj))
+              .then(() => console.log("ICE candidate added successfully"))
+              .catch((err) => console.error("Error adding ICE candidate:", err));
+          } catch (e) {
+            console.error("Invalid candidate format:", candidateStr, e);
+          }
+        });
+      };
+
+      const getDataChannel = () => dataChannel;
+
+      return {
+        peer,
+        getDataChannel,
+        createOffer,
+        createAnswer,
+        saveAnswer,
+        saveIceCandidate
+      };
+    };
+
+    let connection;
+    let isOfferer = false;
+
+    function createOffer() {
+      connection = StartUpPeerConnection();
+      isOfferer = true;
+      connection.createOffer()
+        .then(offer => {
+          document.getElementById("offerOutput").value = offer;
+        })
+        .catch(err => console.error(err));
+    }
+
+    function createAnswer() {
+      connection = StartUpPeerConnection();
+      let offer = document.getElementById("answerInput").value;
+      connection.createAnswer(offer)
+        .then(answer => {
+          document.getElementById("answerOutput").value = answer;
+        })
+        .catch(err => console.error(err));
+    }
+
+    function saveAnswer() {
+      let answer = document.getElementById("saveAnswerInput").value;
+      connection.saveAnswer(answer);
+    }
+
+    function saveIceCandidate() {
+      let candidateText = document.getElementById("iceCandidateInput").value;
+      connection.saveIceCandidate(candidateText);
+    }
+
+    function sendMessage() {
+      let msg = document.getElementById("messageInput").value;
+      let channel = connection.getDataChannel();
+      if (channel && channel.readyState === "open") {
+        channel.send(msg);
+        console.log("Sent:", msg);
+      } else {
+        alert("Data channel not open yet.");
+      }
+    }
+
+    // Update connection status every second
+    setInterval(() => {
+      if (connection && connection.peer) {
+        document.getElementById("status").innerText = "Status: " + connection.peer.connectionState;
+      }
+    }, 1000);
+
+    // Expose functions to the window for button click handlers
+    window.createOffer = createOffer;
+    window.createAnswer = createAnswer;
+    window.saveAnswer = saveAnswer;
+    window.saveIceCandidate = saveIceCandidate;
+    window.sendMessage = sendMessage;
+  </script>
+  
+</body>
+</html>

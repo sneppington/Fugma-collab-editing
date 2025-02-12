@@ -44,7 +44,7 @@ const StartUpPeerConnection = (mode) => {
   }
 
   const getICE = () => {
-    return ICE
+    return JSON.stringify(ICE)
   }
 
   // Listen for ICE candidates and send them to the other peer

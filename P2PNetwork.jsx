@@ -48,13 +48,13 @@ const StartUpPeerConnection = (mode) => {
   }
 
   // Listen for ICE candidates and send them to the other peer
-  peer.onicecandidate = (event) => {
-      if (event.candidate) {
+  peer.addEventListener("icecandidate", (event) => {
+    if (event.candidate) {
         ICE.push(event.candidate)
-        console.log(ICE)
+        console.log("candidate ICE:", ICE)
         // Send this candidate to the remote peer
-      }
-  }
+    }
+  })
 
   // Handle data channel events
   peer.addEventListener('datachannel', event => {

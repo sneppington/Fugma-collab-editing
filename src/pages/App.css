@@ -697,6 +697,11 @@ footer div {
   justify-content: center;
 }
 
+.remove-user {
+  border: none;
+  border-left: 4px black solid;
+}
+
 @media (max-width: 1000px) {
   #drawing-page-inner-wrapper {
     flex-direction: column;

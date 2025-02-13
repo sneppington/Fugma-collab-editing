@@ -33,12 +33,25 @@ const DrawingTool = ({ setDrawControl, peerConnections }) => {
         return paths
     }
 
-    const echoPeers = (message) => {
-        console.log(peerConnections.current)
-        for (let i = 0; i < peerConnections.current.peers.length; i++) {
-            console.log(peerConnections.current)
-            peerConnections.current.peers[i].getDataChannel().send(message) // Echo
-        }
+    const echoPeers = (message) => {  
+        return new Promise((resolve, reject) => {  
+            if (!peerConnections || !peerConnections.current) {  
+                reject("No peer connections available")  
+                return  
+            }  
+    
+            console.log(peerConnections.current)  
+    
+            try {  
+                for (let i = 0; i < peerConnections.current.peers.length; i++) {  
+                    console.log(peerConnections.current)  
+                    peerConnections.current.peers[i].getDataChannel().send(message) // Echo  
+                }  
+                resolve("Message sent to all peers")  
+            } catch (error) {  
+                reject(error)  
+            }  
+        })  
     }
 
     const echoPath = (path) => {
@@ -47,10 +60,14 @@ const DrawingTool = ({ setDrawControl, peerConnections }) => {
         }
     }
 
-    const echoRemovePath = (path) => {
-        if (peerConnections) {
-            echoPeers(JSON.stringify({"answer": "removePath", "content": JSON.stringify(path)}))
-        }
+    const echoRemovePath = (path) => {  
+        return new Promise( async (resolve) => {  
+            if (peerConnections) {
+                console.log(path)
+                await echoPeers(JSON.stringify({ "answer": "removePath", "content": path }))  
+            }  
+            resolve("Path removed")  
+        })  
     }
 
     useEffect(() => {
@@ -92,9 +109,11 @@ const DrawingTool = ({ setDrawControl, peerConnections }) => {
     
             versionIndex = versionList.length // Most recent version is always at the end of versionList
             versionList.push(paper.project.exportJSON())
+            console.log("updated")
         }
 
         const back = () => {
+            console.log(versionList)
             versionIndex -= Number(versionIndex !== 0)
     
             paper.project.clear() // Clear the current project
@@ -111,10 +130,9 @@ const DrawingTool = ({ setDrawControl, peerConnections }) => {
         }
 
         const addPath = (path) => {
-            paths.push(path)
-            console.log(path)
             paper.importJSON(path)
             updateVersionList()
+            paths = getAllPathsFromAllItems()
         }
 
         const removePath = (path) => {
@@ -160,6 +178,7 @@ const DrawingTool = ({ setDrawControl, peerConnections }) => {
             if (path) {
                 path.add(event.point)
                 path.smooth()
+                updateVersionList()
                 echoPath(path)
             }
         }
@@ -168,32 +187,31 @@ const DrawingTool = ({ setDrawControl, peerConnections }) => {
 
         let pathBuffer = []
 
-        function earseDrag(event) {
+         function earseDrag(event) {
             let eraser = new paper.Path.Circle({
                 center: event.point,
                 radius: 20 // Eraser size
             })
-        
-            let intersection = false
+
+            let pathBuffer = []
 
             // Loop through all paths and check for intersection with the eraser
             paths.forEach(existingPath => {
                 if (eraser.intersects(existingPath)) {
-                    pathBuffer.push(existingPath)
+                    pathBuffer.push(JSON.stringify(existingPath))
                     existingPath.remove() // Remove the path if it intersects the eraser
-                    intersection = true
                 }
+            })
+
+            pathBuffer.forEach((path) => {
+                echoRemovePath(path)
+                console.log("path exists?", path)
             })
 
             eraser.remove()
             updateVersionList()
         }
 
-        function earseEnd() {
-            pathBuffer.forEach(path => {
-                echoRemovePath(path)
-            })
-        }
         // Bucket //
 
         function bucketFill(event) {
@@ -250,7 +268,7 @@ const DrawingTool = ({ setDrawControl, peerConnections }) => {
                 case "earser":
                     tool.onMouseDown = () => {}
                     tool.onMouseDrag = earseDrag
-                    tool.onMouseUp = earseEnd
+                    tool.onMouseUp = () => {}
                     break
                 case "bucket":
                     tool.onMouseDown = bucketFill

@@ -59,12 +59,7 @@ const Landing = ({ peerClient, setPeerClient, setShowLanding }) => {
 
     // Join host handler //
 
-    document.querySelector("#join-button").addEventListener("click", () => {
-      createPeerOffer()
-      document.querySelector("#join-wrapper").style.transform = "translateX(0)"
-    })
-
-    document.querySelector("#copy-offer").addEventListener("click", () => {
+    document.querySelector("#copy-offer-wrapper").addEventListener("click", () => {
       navigator.clipboard.writeText(offerRef.current).then(() => {
           console.log("Text copied to clipboard!");
       }).catch(err => {
@@ -73,10 +68,15 @@ const Landing = ({ peerClient, setPeerClient, setShowLanding }) => {
     })
 
     document.querySelector("#paste-answer-wrapper button").addEventListener("click", () => {
-      peerClient.saveAnswer(document.querySelector("#paste-answer-wrapper input").value)
+      try {
+        peerClient.saveAnswer(document.querySelector("#paste-answer-wrapper input").value)
+        document.querySelector("#paste-answer-wrapper .status").style.backgroundColor = "Green"
+      } catch (error) {
+        console.error("Error:", error.message)
+      }
     })
 
-    document.querySelector("#copy-ICE").addEventListener("click", () => {
+    document.querySelector("#copy-ICE-wrapper").addEventListener("click", () => {
       navigator.clipboard.writeText(peerClient.getICE()).then(() => {
           console.log("Text copied to clipboard!");
       }).catch(err => {
@@ -85,8 +85,12 @@ const Landing = ({ peerClient, setPeerClient, setShowLanding }) => {
     })
 
     document.querySelector("#paste-ICE-wrapper button").addEventListener("click", () => {
-      peerClient.saveIceCandidate(document.querySelector("#paste-ICE-wrapper input").value)
-      console.log("mrow", document.querySelector("#paste-ICE-wrapper input").value)
+      try {
+        peerClient.saveIceCandidate(document.querySelector("#paste-ICE-wrapper input").value)
+        document.querySelector("#paste-ICE-wrapper .status").style.backgroundColor = "Green"
+      } catch (error) {
+        console.error("Error:", error.message)
+      }
     })
 
     document.querySelector("#username-wrapper button").addEventListener("click", () => {
@@ -98,25 +102,67 @@ const Landing = ({ peerClient, setPeerClient, setShowLanding }) => {
 
   }, [peerClient])
 
+  useEffect(() => {
+    document.querySelector("#join-button").addEventListener("click", () => {
+      createPeerOffer()
+      document.querySelector("#join-wrapper").style.transform = "translateX(0)"
+    })
+
+    document.querySelector("#join-back-button").addEventListener("click", () => {
+      document.querySelector("#join-wrapper").style.transform = "translateX(100%)"
+      peerClient.peer.close()
+
+      document.querySelector("#paste-answer-wrapper .status").style.backgroundColor = ""
+    })
+  }, [])
+
   return (
     <>
       <aside id='join-wrapper'>
-          <div id='join-steps'>
-            <button id='copy-offer'>copy offer</button>
-            <div id='paste-answer-wrapper'>
-              <input></input>
-              <button>answer</button>
+        <div id='join-steps'>
+
+          <div className='top-button-wrapper' id='join-back-button'>
+            <div className='nav-button'>
+              <button className='back-button-canvas' style={{ rotate: '180deg' }} />
             </div>
-            <button id='copy-ICE'>Copy ICE</button>
-            <div id='paste-ICE-wrapper'>
-              <input></input>
-              <button>ICE</button>
-            </div>
-            <div id='username-wrapper'>
-              <input></input>
-              <button>name</button>
-            </div>
+            <div className='nav-button-shadow'></div>
           </div>
+
+          <button id='copy-offer-wrapper'>
+            <div id='copy-offer-main' style={{ position: 'absolute' }}>
+              <div id='copy-offer-text'>copy offer</div>
+              <div id='copy-offer-icon'></div>
+            </div>
+            <div id='copy-offer-shadow'>mraw</div>
+          </button>
+          <div id='paste-answer-wrapper' style={{ transform: 'translateX(-10px)' }}>
+            <div className='status' style={{ transform: 'translateY(-20px)' }}>
+              <div></div>
+            </div>
+            <input placeholder='Paste answer'></input>
+            <button></button>
+          </div>
+
+          <button id='copy-ICE-wrapper'>
+            <div id='copy-ICE-main' style={{ position: 'absolute' }}>
+              <div id='copy-ICE-text'>copy ICE</div>
+              <div id='copy-ICE-icon'></div>
+            </div>
+            <div id='copy-ICE-shadow'></div>
+          </button>
+
+          <div id='paste-ICE-wrapper' style={{ transform: 'translateX(-10px)' }}>
+            <div className='status' style={{ transform: 'translateY(-20px)' }}>
+              <div></div>
+            </div>
+            <input placeholder='Paste Other ICE'></input>
+            <button></button>
+          </div>
+          <div id='username-wrapper'>
+            <input placeholder='User Name'></input>
+            <button></button>
+          </div>
+        </div>
       </aside>
       <header id='menu-header'>
         <div className='header-content'>
@@ -141,10 +187,9 @@ const Landing = ({ peerClient, setPeerClient, setShowLanding }) => {
             <h2 style={{ fontSize: '30px' }}>The Real Time Collaborative Tool</h2>
           </div>
           <div id='drawing-canvas-wrapper'>
-            <DrawingTool/>
+            <DrawingTool peerClient={ "offline" } />
           </div>
         </div>
-        <p>{offer}</p>
       </main>
       <footer>
         <div className='footer-deco'></div>

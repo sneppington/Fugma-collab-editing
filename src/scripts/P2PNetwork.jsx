@@ -33,7 +33,7 @@ const StartUpPeerConnection = (mode) => {
   // Save ICE candidate received from the remote peer
   const saveIceCandidate = (candidates) => {
     JSON.parse(candidates).forEach(candidate => {
-        peerConnection.addIceCandidate(new RTCIceCandidate(candidate))
+        peer.addIceCandidate(new RTCIceCandidate(candidate))
           .then(() => console.log("ICE candidate added:", candidate))
           .catch(err => console.error("Error adding ICE candidate:", err))
     })

@@ -42,12 +42,15 @@ const DrawingTool = ({ setDrawControl, peerConnections }) => {
     }
 
     const echoPath = (path) => {
-        console.log("mrw")
-        echoPeers(JSON.stringify({"answer": "addPath", "content": JSON.stringify(paper.project.exportJSON())}))
+        if (peerConnections) {
+            echoPeers(JSON.stringify({"answer": "addPath", "content": JSON.stringify(paper.project.exportJSON())}))
+        }
     }
 
     const echoRemovePath = (path) => {
-        echoPeers(JSON.stringify({"answer": "removePath", "content": JSON.stringify(path)}))
+        if (peerConnections) {
+            echoPeers(JSON.stringify({"answer": "removePath", "content": JSON.stringify(path)}))
+        }
     }
 
     useEffect(() => {

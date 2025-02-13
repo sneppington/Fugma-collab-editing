@@ -1,3 +1,7 @@
+* {
+  font-family: "Comic Neue", cursive;
+}
+
 html, body {
   margin: 0;
   padding: 0;
@@ -127,6 +131,263 @@ html, body {
   gap: 20px;
 }
 
+#join-steps input {
+  background-color: rgba(255, 255, 255, 0.737);
+  border: 4px black solid;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  padding: 7px;
+  font-size: large;
+  font-weight: bolder;
+  font-family: "Comic Neue", cursive;
+}
+
+#join-back-button {
+  transform: translate(calc(-40vw + 10px), calc(-45vh + 30px));
+  position: absolute;
+}
+
+#copy-offer-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background-color: transparent;
+}
+
+#copy-offer-wrapper:hover #copy-offer-main {
+  transform: translate(-3px, -3px);
+}
+
+#copy-offer-wrapper:hover #copy-offer-shadow {
+  transform: translate(-1px, -1px);
+}
+
+#copy-offer-wrapper:active #copy-offer-main {
+  transition: transform cubic-bezier(0.075, 0.82, 0.165, 1) 0.1s;
+  transform: translate(-2px, -2px);
+}
+
+#copy-offer-wrapper:active #copy-offer-shadow {
+  transition: transform cubic-bezier(0.075, 0.82, 0.165, 1) 0.1s;
+  transform: translate(-2px, -2px);
+}
+
+#copy-offer-main {
+  transform: translate(-7px, -7px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: 'absolute';
+  z-index: 1;
+  transition: transform cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s;
+}
+
+#copy-offer-text {
+  background-color: rgb(255, 255, 255);
+  border: 4px black solid;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  padding: 7px;
+  font-size: large;
+  font-weight: bolder;
+}
+
+#copy-offer-icon {
+  width: 40px;
+  height: 35px;
+  background-color: rgb(73, 255, 143);
+  border: 4px black solid;
+  border-left: none;
+  background-image: url("/copyIcon.svg");
+  background-repeat: no-repeat;
+  background-size: 30px;
+  background-position: center center;
+  transition: background-color cubic-bezier(0.075, 0.82, 0.165, 1) 0.4s;
+}
+
+#copy-offer-shadow {
+  width: 143px;
+  height: 43px;
+  background-color: black;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  transition: background-color cubic-bezier(0.075, 0.82, 0.165, 1) 0.4s;
+}
+
+#copy-offer:hover {
+  background-color: rgb(213, 255, 128);
+}
+
+#copy-offer:active {
+  background-color: rgb(255, 230, 128);
+}
+
+.status {
+  width: 20px;
+  height: 20px;
+  background-color: red;
+  border-radius: 50%;
+  border: 4px black solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s;
+}
+
+.status div {
+  width: 4px;
+  height: 50%;
+  background-color: black;
+  border-radius: 10px;
+  transition: rotate cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s;
+}
+
+#paste-answer-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#paste-answer-wrapper button {
+  width: 40px;
+  height: 100%;
+  background-color: rgba(73, 255, 143, 0.701);
+  border: 4px black solid;
+  border-left: none;
+  background-image: url("/arrow.svg");
+  background-repeat: no-repeat;
+  background-size: 30px;
+  background-position: center 2px;
+  transition: background-color cubic-bezier(0.075, 0.82, 0.165, 1) 1s;
+}
+
+#paste-answer-wrapper button:hover {
+  background-color: rgb(255, 251, 0);
+}
+
+#copy-ICE-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background-color: transparent;
+}
+
+#copy-ICE-wrapper:hover #copy-ICE-main {
+  transform: translate(-3px, -3px);
+}
+
+#copy-ICE-wrapper:hover #copy-ICE-shadow {
+  transform: translate(-1px, -1px);
+}
+
+#copy-ICE-wrapper:active #copy-ICE-main {
+  transition: transform cubic-bezier(0.075, 0.82, 0.165, 1) 0.1s;
+  transform: translate(-2px, -2px);
+}
+
+#copy-ICE-wrapper:active #copy-ICE-shadow {
+  transition: transform cubic-bezier(0.075, 0.82, 0.165, 1) 0.1s;
+  transform: translate(-2px, -2px);
+}
+
+#copy-ICE-main {
+  transform: translate(-7px, -7px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: 'absolute';
+  z-index: 1;
+  transition: transform cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s;
+}
+
+#copy-ICE-text {
+  background-color: rgb(255, 255, 255);
+  border: 4px black solid;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  padding: 7px;
+  font-size: large;
+  font-weight: bolder;
+}
+
+#copy-ICE-icon {
+  width: 40px;
+  height: 35px;
+  background-color: rgb(73, 255, 143);
+  border: 4px black solid;
+  border-left: none;
+  background-image: url("/copyIcon.svg");
+  background-repeat: no-repeat;
+  background-size: 30px;
+  background-position: center center;
+  transition: background-color cubic-bezier(0.075, 0.82, 0.165, 1) 0.4s;
+}
+
+#copy-ICE-shadow {
+  width: 135px;
+  height: 43px;
+  background-color: black;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  transition: background-color cubic-bezier(0.075, 0.82, 0.165, 1) 0.4s;
+}
+
+#copy-ICE:hover {
+  background-color: rgb(213, 255, 128);
+}
+
+#copy-ICE:active {
+  background-color: rgb(255, 230, 128);
+}
+
+#paste-ICE-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#paste-ICE-wrapper button {
+  width: 40px;
+  height: 100%;
+  background-color: rgba(73, 255, 143, 0.701);
+  border: 4px black solid;
+  border-left: none;
+  background-image: url("/arrow.svg");
+  background-repeat: no-repeat;
+  background-size: 30px;
+  background-position: center 2px;
+  transition: background-color cubic-bezier(0.075, 0.82, 0.165, 1) 1s;
+}
+
+#paste-ICE-wrapper button:hover {
+  background-color: rgb(255, 251, 0);
+}
+
+#username-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#username-wrapper button {
+  width: 40px;
+  height: 100%;
+  background-color: rgba(73, 255, 143, 0.701);
+  border: 4px black solid;
+  border-left: none;
+  background-image: url("/arrow.svg");
+  background-repeat: no-repeat;
+  background-size: 30px;
+  background-position: center 2px;
+  transition: background-color cubic-bezier(0.075, 0.82, 0.165, 1) 1s;
+}
+
+#username-wrapper button:hover {
+  background-color: rgb(255, 251, 0);
+}
+
 /* End join page */
 
 footer {
@@ -199,8 +460,8 @@ footer div {
 
 #add-user-wrapper {
   width: 90%;
-  height: 30px;
-  visibility: none;
+  height: 0;
+  flex-grow: 0;
   background-color: rgba(255, 255, 255, 0.819);
   border: 4px black solid;
   border-radius: 20px;
@@ -252,6 +513,7 @@ footer div {
   width: 100%;
   margin-top: 10px;
   margin-bottom: 10px;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -261,10 +523,12 @@ footer div {
 
 #user-add-form input {
   width: 80%;
-  height: 100%;
+  height: 30px;
   border: 0;
   border-bottom-left-radius: 10px;
   border-top-left-radius: 10px;
+  border: 4px black solid;
+  font-family: "Comic Neue", cursive;
 }
 
 #copy-answer {
@@ -276,23 +540,49 @@ footer div {
 }
 
 #answer-wrapper {
-  height: 20px;
+  height: 40px;
   display: flex;
   align-items: center; 
 }
 
 #answer-wrapper button {
+  width: 40px;
   height: 100%;
+  background-color: rgba(73, 255, 143, 0.701);
+  border: 4px black solid;
+  border-left: none;
+  background-image: url("/arrow.svg");
+  background-repeat: no-repeat;
+  background-size: 30px;
+  background-position: center 1px;
+  transition: background-color cubic-bezier(0.075, 0.82, 0.165, 1) 1s;
+}
+
+#answer-wrapper button:hover {
+  background-color: rgb(255, 251, 0);
 }
 
 #ICE-wrapper {
-  height: 20px;
+  height: 40px;
   display: flex;
   align-items: center; 
 }
 
 #ICE-wrapper button {
+  width: 40px;
   height: 100%;
+  background-color: rgba(73, 255, 143, 0.701);
+  border: 4px black solid;
+  border-left: none;
+  background-image: url("/arrow.svg");
+  background-repeat: no-repeat;
+  background-size: 30px;
+  background-position: center 1px;
+  transition: background-color cubic-bezier(0.075, 0.82, 0.165, 1) 1s;
+}
+
+#ICE-wrapper button:hover {
+  background-color: rgb(255, 251, 0);
 }
 
 #user-list {
@@ -321,4 +611,104 @@ footer div {
 .user button {
   width: 25px;
   height: 25px;
+}
+
+#copy-answer-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background-color: transparent;
+}
+
+#copy-answer-wrapper:hover #copy-answer-main {
+  transform: translate(-3px, -3px);
+}
+
+#copy-answer-wrapper:hover #copy-answer-shadow {
+  transform: translate(-1px, -1px);
+}
+
+#copy-answer-wrapper:active #copy-answer-main {
+  transition: transform cubic-bezier(0.075, 0.82, 0.165, 1) 0.1s;
+  transform: translate(-2px, -2px);
+}
+
+#copy-answer-wrapper:active #copy-answer-shadow {
+  transition: transform cubic-bezier(0.075, 0.82, 0.165, 1) 0.1s;
+  transform: translate(-2px, -2px);
+}
+
+#copy-answer-main {
+  transform: translate(-7px, -7px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: 'absolute';
+  z-index: 1;
+  transition: transform cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s;
+}
+
+#copy-answer-text {
+  background-color: rgb(255, 255, 255);
+  border: 4px black solid;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  padding: 7px;
+  font-size: large;
+  font-weight: bolder;
+}
+
+#copy-answer-icon {
+  width: 40px;
+  height: 35px;
+  background-color: rgb(73, 255, 143);
+  border: 4px black solid;
+  border-left: none;
+  background-image: url("/copyIcon.svg");
+  background-repeat: no-repeat;
+  background-size: 30px;
+  background-position: center center;
+  transition: background-color cubic-bezier(0.075, 0.82, 0.165, 1) 0.4s;
+}
+
+#copy-answer-shadow {
+  width: 143px;
+  height: 43px;
+  background-color: black;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  transition: background-color cubic-bezier(0.075, 0.82, 0.165, 1) 0.4s;
+}
+
+#copy-answer:hover {
+  background-color: rgb(213, 255, 128);
+}
+
+#copy-answer:active {
+  background-color: rgb(255, 230, 128);
+}
+
+#drawing-page-inner-wrapper {
+  width: 100vw;
+  height: calc(100vh - 100px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 1000px) {
+  #drawing-page-inner-wrapper {
+    flex-direction: column;
+    margin-top: 100px;
+  }
+  #draw-page-control-bar {
+    width: 90vw;
+    height: fit-content;
+    border-right: 4px black solid;
+    flex: 0;
+    order: -1;
+    position: absolute;
+    top: 10px;
+  }
 }

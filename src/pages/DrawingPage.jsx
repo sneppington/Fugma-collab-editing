@@ -39,8 +39,7 @@ const DrawingPage = ({ peerClient, setShowLanding }) => {
                 const addUserWrapper = document.querySelector("#add-user-wrapper")
                 const addUserButton = document.querySelector("#add-user-button")
 
-                document.querySelector("#add-user-wrapper").style.visibility = "block"
-                console.log(document.querySelector("#add-user-wrapper"))
+                addUserWrapper.style.height = "30px"
         
                 addUserButton.addEventListener("click", () => {
                     if (addingUser) {
@@ -66,11 +65,21 @@ const DrawingPage = ({ peerClient, setShowLanding }) => {
                                 htmlElement.insertAdjacentHTML("beforeend", userButton.trim())
 
                                 htmlElement.querySelector("button").addEventListener("click", () => {
-                                    peerConnections.current.peers[peerConnections.current.peers.indexOf(peerConnection)].destroy()
+                                    peerConnection.getDataChannel().send(JSON.stringify({"answer": "close"}))
+                                    peerConnection.peer.close()
                                     htmlElement.remove()
                                 })
 
                                 document.querySelector("#user-list").appendChild(htmlElement)
+
+                                peerConnection.peer.addEventListener("connectionstatechange", () => {  
+                                    if (  
+                                        peerClient.peer.connectionState === "disconnected" ||  
+                                        peerClient.peer.connectionState === "failed"  
+                                    ) {  
+                                        htmlElement.remove()
+                                    }  
+                                })   
 
                                 const echoPeers = (message) => {
                                     for (let i = 0; i < peerConnections.current.peers.length; i++) {
@@ -121,7 +130,7 @@ const DrawingPage = ({ peerClient, setShowLanding }) => {
                     })
                 })
         
-                document.querySelector("#copy-answer").addEventListener("click", () => {
+                document.querySelector("#copy-answer-wrapper").addEventListener("click", () => {
                     navigator.clipboard.writeText(answer).then(() => {
                         console.log("Text copied to clipboard!")
                     }).catch(err => {
@@ -129,7 +138,7 @@ const DrawingPage = ({ peerClient, setShowLanding }) => {
                     })
                 })
         
-                document.querySelector("#copy-ICE").addEventListener("click", () => {
+                document.querySelector("#copy-ICE-wrapper").addEventListener("click", () => {
                     navigator.clipboard.writeText(peerConnectionBuffer.getICE()).then(() => {
                         console.log(peerConnectionBuffer)
                         console.log("Text copied to clipboard!")
@@ -142,19 +151,23 @@ const DrawingPage = ({ peerClient, setShowLanding }) => {
                     peerConnectionBuffer.saveIceCandidate(document.querySelector("#ICE-wrapper input").value)
                 })
             } else { // Client
+                document.querySelector("#add-user-wrapper").remove()
+
                 peerClient = peerClient.current
                 let dataChannel = peerClient.getDataChannel()
 
                 peerConnections.current.mode = "client"
                 peerConnections.current.peers.push(peerClient)
 
-                peerClient.peer.onconnectionstatechange = () => { // Lost connection to host
-                    if (peer.connectionState === "disconnected" || peer.connectionState === "failed") {
-                        console.log("Peer disconnected!")
-                        
-                        setShowLanding(true)
-                    }
-                }
+                peerClient.peer.addEventListener("connectionstatechange", () => {  
+                    if (  
+                        peerClient.peer.connectionState === "disconnected" ||  
+                        peerClient.peer.connectionState === "failed"  
+                    ) {  
+                        console.log("Peer disconnected!")  
+                        setShowLanding(true)  
+                    }  
+                })                
 
                 dataChannel.onmessage = (message) => {
                     message = JSON.parse(message.data)
@@ -180,18 +193,20 @@ const DrawingPage = ({ peerClient, setShowLanding }) => {
                         case "removePath":
                             drawControlRef.current.removePath(JSON.parse(message.content))
                             break
+                        case "close":
+                            setShowLanding(true)
                         default:
                             break
                     }
                 }
 
-                dataChannel.send(JSON.stringify({'request': 'userList'})) // Request User List
+                //dataChannel.send(JSON.stringify({'request': 'userList'})) // Request User List
             }
         })    
     }, [])
 
     return (
-        <div style={{ width: '100vw', height: 'calc(100vh - 100px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div id='drawing-page-inner-wrapper'>
             <div id='drwaing-tool-wrapper' style={{ width: "80%", height: "100%", display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <DrawingTool setDrawControl={ setDrawControl } peerConnections={ peerConnections } />
             </div>
@@ -206,13 +221,28 @@ const DrawingPage = ({ peerClient, setShowLanding }) => {
                     </div>
                     <form id='user-add-form'>
                         <div id='answer-wrapper'>
-                            <input type='text'></input>
+                            <input type='text' placeholder='Paste Offer'></input>
                             <button></button>
                         </div>
-                        <button id='copy-answer'>copy answer</button>
-                        <button id='copy-ICE'>copy ICE</button>
+
+                        <button id='copy-answer-wrapper'>
+                            <div id='copy-answer-main' style={{ position: 'absolute' }}>
+                            <div id='copy-answer-text'>copy offer</div>
+                            <div id='copy-answer-icon'></div>
+                            </div>
+                            <div id='copy-answer-shadow'>mraw</div>
+                        </button>
+
+                        <button id='copy-ICE-wrapper'>
+                            <div id='copy-ICE-main' style={{ position: 'absolute' }}>
+                            <div id='copy-ICE-text'>copy ICE</div>
+                            <div id='copy-ICE-icon'></div>
+                            </div>
+                            <div id='copy-ICE-shadow'></div>
+                        </button>
+                        
                         <div id='ICE-wrapper'>
-                            <input type='text'></input>
+                            <input type='text' placeholder='Paste ICE'></input>
                             <button></button>
                         </div>
                     </form>
